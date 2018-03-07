@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - "/data/caps/db:/data/db"
+
+  api:
+    depends_on:
+      - db
+    image: semrekkers/caps-api:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/data/caps/userdata:/data/caps"
+      - "<YOUR_CADDY_FOLDER>:/root/.caddy" # Example: "/data/secrets/caps:/root/.caddy"
+    environment:
+      MONGO_URI: mongodb://db:27017/caps
+      TLS: <YOUR_EMAIL>
+      HOSTNAME: <YOUR_HOSTNAME>
+      JWT_SECRET: <YOUR_SECRET>
+      MOLLIE_KEY: <YOUR_MOLLIE_KEY>
+      MOLLIE_WEBHOOK_URL: <YOUR_WEBHOOK_URL>
+      MAILGUN_KEY: YOUR_KEY_HERE
+      SENDING_DOMAIN: YOUR_SENDING_DOMAIN_HERE
+      FROM_EMAIL: YOUR_FROM_MAIL_HERE

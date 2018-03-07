@@ -1,0 +1,14 @@
+{$HOSTNAME}
+
+tls {$TLS}
+
+proxy /api localhost:3000
+
+rewrite {
+    if {path} not_starts_with /api
+    to {path} /
+}
+
+ext .html
+gzip
+log
